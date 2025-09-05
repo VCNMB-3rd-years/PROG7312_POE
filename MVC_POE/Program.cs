@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Cors.Infrastructure;
+using MVC_POE.Services;
+
 namespace MVC_POE
 {
     public class Program
@@ -8,6 +11,7 @@ namespace MVC_POE
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSingleton<HashSetService>();
 
             var app = builder.Build();
 
@@ -28,7 +32,7 @@ namespace MVC_POE
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=ReportIssues}/{action=CreateReportIssues}/{id?}");
 
             app.Run();
         }

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<MVC_POE.Models.ReportIssuesForm>
+
+@{
+    ViewData["Title"] = "ViewReportIssues";
+}
+
+<h1>All Reported Issues</h1>
+
+<p>
+    <a asp-action="CreateReportIssues">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FormId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MediaAttachment)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FormId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                    @if (!string.IsNullOrEmpty(item.MediaAttachment))
+                    {
+                        <a href="~/uploads/@item.MediaAttachment" target="_blank">View File</a>
+                    }
+                    else
+                    {
+                        <span>No file</span>
+                    }
+            </td>
+            <td>
+                    @if (!string.IsNullOrEmpty(item.MediaAttachment))
+                    {
+                        <a href="~/uploads/@item.MediaAttachment" download="@item.MediaAttachment">Download</a>
+                    }
+                    else
+                    {
+                        <span>Not available</span>
+                    }
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

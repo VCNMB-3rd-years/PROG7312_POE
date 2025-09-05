@@ -5,7 +5,7 @@ namespace MVC_POE.Models
     public class ReportIssuesForm
     {
         [Key]
-        public Guid FormId { get; set; }
+        public Guid FormId { get; set; } = Guid.NewGuid();
 
         [Required(ErrorMessage ="Location is required")]
         public string Location {  get; set; }
