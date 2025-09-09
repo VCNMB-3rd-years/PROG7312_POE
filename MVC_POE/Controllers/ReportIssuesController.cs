@@ -85,9 +85,17 @@ namespace MVC_POE.Controllers
         }
 
         // Displays all submissions
-        public IActionResult ViewReportIssues()
+        public IActionResult ViewReportIssues(string location)
         {
-            var forms = _hashSetService.GetAllForms(); // Get all saved forms
+            var forms = _hashSetService.GetAllForms();
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                forms = forms.Where(f => f.Location.Contains(location, StringComparison.OrdinalIgnoreCase));
+            }
+
+            ViewData["CurrentLocation"] = location;
+
             return View(forms);
         }
 

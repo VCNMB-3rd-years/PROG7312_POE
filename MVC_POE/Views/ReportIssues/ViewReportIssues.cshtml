@@ -6,7 +6,13 @@
 }
 
 <h1 class="mb-4">All Reported Issues</h1>
-
+<hr/>
+<form method="get" class="mb-4 d-flex">
+    <input type="text" name="location" value="@ViewData["CurrentLocation"]" 
+           class="form-control me-2" placeholder="Search by location..." />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+<br/>
 <p>
     <a asp-action="CreateReportIssues" class="btn btn-primary">Create New</a>
 </p>
