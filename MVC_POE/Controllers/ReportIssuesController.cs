@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MVC_POE.Models;
 using MVC_POE.Services;
+using System.Reflection;
 
 namespace MVC_POE.Controllers
 {
@@ -55,33 +56,20 @@ namespace MVC_POE.Controllers
 
             if (ModelState.IsValid)
             {
-                // Just pass the model to the confirmation page
-                return View("ReportIssuesConfirmation", reportIssuesForm);
+                _hashSetService.AddForm(reportIssuesForm);
+                return RedirectToAction("ViewReportIssues"); // shows list
             }
+
 
             return View(reportIssuesForm);
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult ConfirmReportIssues(ReportIssuesForm reportIssuesForm)
-        {
-            if (ModelState.IsValid)
-            {
-                _hashSetService.AddForm(reportIssuesForm); // Save here
-                return RedirectToAction("ViewReportIssues");
-            }
-
-            return View("ReportIssuesConfirmation", reportIssuesForm);
-        }
-
 
 
         // Displays all submissions
         public IActionResult ViewReportIssues()
         {
-            var reportIssueForms = _hashSetService.GetAllForms();
-            return View(reportIssueForms);
+            var forms = _hashSetService.GetAllForms(); // Get all saved forms
+            return View(forms);
         }
 
         public IActionResult ReportIssuesConfirmation()

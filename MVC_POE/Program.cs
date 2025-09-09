@@ -33,7 +33,11 @@ namespace MVC_POE
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            using (var scope = app.Services.CreateScope())
+            {
+                var service = scope.ServiceProvider.GetRequiredService<HashSetService>();
+                service.SeedForms();
+            }
             app.Run();
         }
     }

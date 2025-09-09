@@ -16,5 +16,15 @@ namespace MVC_POE.Models
         [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
         public string? MediaAttachment { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ReportIssuesForm form && FormId.Equals(form.FormId);
+        }
+
+        public override int GetHashCode()
+        {
+            return FormId.GetHashCode();
+        }
     }
 }
