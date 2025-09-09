@@ -28,5 +28,10 @@ namespace MVC_POE.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult UnderMaintainence()
+        {
+            return View();
+        }
     }
 }

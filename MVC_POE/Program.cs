@@ -32,7 +32,7 @@ namespace MVC_POE
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=ReportIssues}/{action=CreateReportIssues}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
