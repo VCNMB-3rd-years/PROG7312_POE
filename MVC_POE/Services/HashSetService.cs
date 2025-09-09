@@ -25,7 +25,7 @@ namespace MVC_POE.Services
                 Location = "Walmer",
                 Category = "Roads",
                 Description = "Potholes near the traffic light just after Circular drive.",
-                MediaAttachment = "bg6.jpg"
+                MediaAttachment = "~/uploads/broken road.jpg"
             });
 
             _reportIssuesForms.Add(new ReportIssuesForm
@@ -33,7 +33,7 @@ namespace MVC_POE.Services
                 Location = "Westering",
                 Category = "Roads",
                 Description = "Robot is on the ground, utterly damaged.",
-                MediaAttachment = "bg7.jpg"
+                MediaAttachment = "~/uploads/brokenraod2.jpg"
             });
 
             _reportIssuesForms.Add(new ReportIssuesForm
@@ -41,7 +41,7 @@ namespace MVC_POE.Services
                 Location = "Mill Park",
                 Category = "Sanitisation",
                 Description = "Trash bins not collected for 3 days and rubbish is flying around in streets.",
-                MediaAttachment = "bg4.jpg"
+                MediaAttachment = "~/uploads/rubbish2.jpg"
             });
 
             _reportIssuesForms.Add(new ReportIssuesForm
@@ -49,7 +49,7 @@ namespace MVC_POE.Services
                 Location = "Westering",
                 Category = "Roads",
                 Description = "Robot is destroyed and laying on the ground.",
-                MediaAttachment = "bg8.jpg"
+                MediaAttachment = "~/uploads/burstpipe.jpg"
             });
         }
 
