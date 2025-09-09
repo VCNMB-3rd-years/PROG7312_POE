@@ -106,4 +106,4 @@ MVC_POE/
 1. Clone the repository:
 
 ```bash
-git clone <repository_url>
+git clone (https://github.com/VCNMB-3rd-years/PROG7312_POE.git)
