@@ -19,15 +19,23 @@ namespace MVC_POE.Controllers
         {
             return View();
         }
+        [HttpGet]
         public IActionResult CreateReportIssues()
         {
-            return View();
+            return View(new ReportIssuesForm());
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateReportIssues(ReportIssuesForm model)
+        {
+            // Just return the form pre-filled with the data
+            return View(model);
         }
 
         // Displays the form for citizens to submit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ReportIssuesConfirmation(ReportIssuesForm reportIssuesForm, IFormFile? file)
+        public async Task<IActionResult> ShowReportIssuesConfirmation(ReportIssuesForm reportIssuesForm, IFormFile? file)
         {
             if (reportIssuesForm.FormId == Guid.Empty)
             {
@@ -56,14 +64,25 @@ namespace MVC_POE.Controllers
 
             if (ModelState.IsValid)
             {
-                _hashSetService.AddForm(reportIssuesForm);
-                return RedirectToAction("ViewReportIssues"); // shows list
+                // Just pass the model to the confirmation page
+                return View("ReportIssuesConfirmation", reportIssuesForm);
             }
-
 
             return View(reportIssuesForm);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConfirmReportIssues(ReportIssuesForm reportIssuesForm)
+        {
+            if (ModelState.IsValid)
+            {
+                _hashSetService.AddForm(reportIssuesForm);
+                return RedirectToAction("ViewReportIssues"); // shows list
+            }
+
+            return View("ReportIssuesConfirmation", reportIssuesForm);
+        }
 
         // Displays all submissions
         public IActionResult ViewReportIssues()
@@ -72,10 +91,6 @@ namespace MVC_POE.Controllers
             return View(forms);
         }
 
-        public IActionResult ReportIssuesConfirmation()
-        {
-            return View();
-        }
 
     }
 }

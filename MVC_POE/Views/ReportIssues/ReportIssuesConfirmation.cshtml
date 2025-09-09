@@ -35,7 +35,7 @@
                     </form>
 
                     <!-- Confirm button triggers final submission -->
-                    <form asp-action="ViewReportIssues" method="post">
+                    <form asp-action="ConfirmReportIssues" method="post">
                         @Html.AntiForgeryToken()
                         <input type="hidden" asp-for="FormId" />
                         <input type="hidden" asp-for="Location" />
