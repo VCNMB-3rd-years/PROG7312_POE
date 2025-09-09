@@ -18,49 +18,25 @@ namespace MVC_POE.Controllers
         {
             return View();
         }
-
-        // Displays the form for citizens to submit
-        [HttpGet]
         public IActionResult CreateReportIssues()
         {
             return View();
         }
 
-        //// Handles form submission
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult CreateReportIssues(ReportIssuesForm reportIssuesForm)
-        //{
-        //    // If FormId was empty (new submission), generate a new one
-        //    if (reportIssuesForm.FormId == Guid.Empty)
-        //    {
-        //        reportIssuesForm.FormId = Guid.NewGuid();
-        //    }
-
-        //    if (ModelState.IsValid)
-        //    {
-        //        _hashSetService.AddForm(reportIssuesForm);
-        //        return RedirectToAction("ViewReportIssues");
-        //    }
-
-        //    return View(reportIssuesForm);
-        //}
-
+        // Displays the form for citizens to submit
         [HttpPost]
-        public async Task<IActionResult> CreateReportIssues(ReportIssuesForm reportIssuesForm, IFormFile? file)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReportIssuesConfirmation(ReportIssuesForm reportIssuesForm, IFormFile? file)
         {
-            // Ensure a FormId is generated if not provided
             if (reportIssuesForm.FormId == Guid.Empty)
             {
                 reportIssuesForm.FormId = Guid.NewGuid();
             }
 
-            // Handle file upload only if a file was provided
             if (file != null && file.Length > 0)
             {
                 string uploadFolder = Path.Combine(_webHost.WebRootPath, "uploads");
-
-                if (!Directory.Exists(uploadFolder)) // Create folder if it doesn’t exist
+                if (!Directory.Exists(uploadFolder))
                 {
                     Directory.CreateDirectory(uploadFolder);
                 }
@@ -73,20 +49,32 @@ namespace MVC_POE.Controllers
                     await file.CopyToAsync(stream);
                 }
 
-                // Save path/filename to the form object
-                reportIssuesForm.MediaAttachment = fileName;
-
-                ViewBag.Message = fileName + " uploaded successfully!";
+                // Store relative path for preview
+                reportIssuesForm.MediaAttachment = "/uploads/" + fileName;
             }
 
             if (ModelState.IsValid)
             {
-                _hashSetService.AddForm(reportIssuesForm);
-                return RedirectToAction("ViewReportIssues");
+                // Just pass the model to the confirmation page
+                return View("ReportIssuesConfirmation", reportIssuesForm);
             }
 
             return View(reportIssuesForm);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ConfirmReportIssues(ReportIssuesForm reportIssuesForm)
+        {
+            if (ModelState.IsValid)
+            {
+                _hashSetService.AddForm(reportIssuesForm); // Save here
+                return RedirectToAction("ViewReportIssues");
+            }
+
+            return View("ReportIssuesConfirmation", reportIssuesForm);
+        }
+
 
 
         // Displays all submissions
@@ -94,6 +82,11 @@ namespace MVC_POE.Controllers
         {
             var reportIssueForms = _hashSetService.GetAllForms();
             return View(reportIssueForms);
+        }
+
+        public IActionResult ReportIssuesConfirmation()
+        {
+            return View();
         }
 
     }
