@@ -42,8 +42,6 @@ In addition, the application includes an **Event Dashboard** where users can vie
 
 ## 🏗 Project Structure
 
-## 🏗 Project Structure
-
 MVC_POE/
 ├── Controllers/
 │   ├── ReportIssuesController.cs
