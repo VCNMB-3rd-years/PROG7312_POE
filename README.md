@@ -53,3 +53,6 @@ For example, if a user often searches for “Loadshedding” and “Water Supply
 ```bash
 git clone https://github.com/VCNMB-3rd-years/PROG7312_POE.git
 Open the project in Visual Studio or Visual Studio Code.
+
+
+
