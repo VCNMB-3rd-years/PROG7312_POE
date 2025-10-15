@@ -220,4 +220,3 @@ cd PROG7312_POE
 ```
 dotnet run
 ```
-4. Open a browser and go to https://localhost:5001/ (or the specified port).
