@@ -1,177 +1,215 @@
-# Municipality Report Issues Portal (MVC_POE)
+# 🧩 PROG7312_POE – Community Service Request and Events App
 
-## Overview
-The **Municipality Report Issues Portal** is a web application designed to allow citizens to report local municipal issues such as sanitation problems, road repairs, utility disruptions, and loadshedding.  
+## 📘 Project Overview
 
-The system provides an intuitive interface for users to:
-- Submit reports
-- Upload media attachments
-- Review all submissions
+The Community Service Request and Events Application is a Windows Forms–based solution developed to help municipalities and residents efficiently manage and monitor service requests (e.g., potholes, power outages) and local community events/announcements.
 
-Built using **ASP.NET Core MVC**, this application stores reports temporarily using an in-memory **HashSet** service and features a dynamic progress bar, confirmation workflow, and search/filter functionality.  
+It aims to enhance citizen engagement, municipal responsiveness, and community awareness through an intuitive interface and the use of advanced data structures for better data management, search, and recommendations.
 
-It also includes an **Event Dashboard** and **Announcements Section** for community engagement.
+# 🚀 Features Overview
+## 🛠️ Core Features
 
----
+Service Request Status Tracking
+Submit, update, and view the current status of community service requests.
 
-## Features
+Local Events & Announcements
+Browse, search, and sort community events by date, category, or name.
 
-| Feature | Description |
-|----------|--------------|
-| **Submit Reports** | Citizens can report issues by entering Location, Category, Description, and optional media attachments. |
-| **File Upload & Preview** | Uploaded images are previewed on the confirmation page. |
-| **Confirmation Workflow** | Users can review their submission before final confirmation. |
-| **Dynamic Progress Bar** | Shows the completion progress of the form. |
-| **View All Reports** | Displays all submitted reports as mini-cards grouped by location. |
-| **Search & Filter** | Filter reports by location and category. |
-| **Download Attachments** | View or download uploaded images/files. |
-| **Event Dashboard** | Displays local events, allows favorites, and shows recommendations. |
-| **Favorites & Recommendations** | Uses a **Priority Queue** to rank and recommend events based on user interests. |
-| **Announcements Section** | Displays important notices, news, and community updates. |
+Smart Recommendations
+Suggests relevant events to users based on their previous searches and interest patterns.
+(Now dynamically generated using session-based tracking and cleared when the app closes.)
 
----
+## 🧠 Data Structures Used and Their Roles
+### 1. Dictionary / SortedDictionary
 
-## Technologies Used
-- **C# / ASP.NET Core MVC**
-- **Razor Pages** for Views
-- **Bootstrap 5** for layout and styling
-- **JavaScript** for interactivity
-- **HTML & CSS** for UI
-- **In-memory HashSet Service** for temporary data storage
-- **PriorityQueue** for managing and recommending events
-- **IFormFile** for media uploads
+Used in: Local Events and Announcements
 
----
+Purpose:
+Efficiently stores and retrieves event data using a unique key (like event title or ID).
 
-## Models
+Benefits:
 
-### **ReportIssuesForm**
-| Property | Type | Description |
-|-----------|------|--------------|
-| FormId | Guid | Unique ID for each report |
-| Location | string | Location of the issue |
-| Category | string | Issue category (e.g., Sanitation, Roads) |
-| Description | string | Detailed description of the problem |
-| MediaAttachment | string? | Optional file path of the uploaded image |
+Enables O(1) average-time access to events.
 
-### **Event**
-| Property | Type | Description |
-|-----------|------|--------------|
-| EventId | Guid | Unique ID for each event |
-| EventName | string | Event title |
-| EventCategory | string | Event category (e.g., Music, Walk) |
-| EventDescription | string | Description of the event |
-| EventDateTime | DateTime | Scheduled date/time |
-| EventImage | string? | Optional image path |
-| IsFavorite | bool | Indicates if user favorited it |
-
-### **Announcement**
-| Property | Type | Description |
-|-----------|------|--------------|
-| AnnouncementId | Guid | Unique ID for announcement |
-| AnnouncementName | string | Title of the announcement |
-| AnnouncementCategory | string | Category (e.g., News, Event) |
-| AnnouncementDescription | string | Description of announcement |
-| AnnouncementDate | DateTime | Date of posting |
-
----
-
-## Controllers
-
-### **ReportIssuesController**
-Handles issue report creation and display.
-
-| Action | Method | Description |
-|--------|---------|-------------|
-| `CreateReportIssues` | GET | Displays the report form |
-| `ReportIssuesConfirmation` | POST | Shows confirmation before saving |
-| `ConfirmReportIssues` | POST | Final submission; saves to in-memory store |
-| `ViewReportIssues` | GET | Displays all reports grouped by location |
-
-### **EventController**
-Manages event dashboard and favorites.
-
-| Action | Method | Description |
-|--------|---------|-------------|
-| `AllEvents` | GET | Lists all events by category |
-| `EventDetails` | GET | Shows event info and favorite option |
-| `FavoriteEvent` | POST | Adds an event to favorites |
-| `UnfavoriteEvent` | POST | Removes from favorites |
-| `RecommendedEvents` | GET | Shows events based on favorites |
-
-### **AnnouncementController**
-Displays and filters announcements.
-
-| Action | Method | Description |
-|--------|---------|-------------|
-| `AllAnnouncements` | GET | Shows latest and older announcements |
-| `AnnouncementDetails` | GET | Displays a single announcement |
-| `FilterAnnouncements` | POST | Filters announcements by category/date |
-
----
-
-## Implemented Data Structures
-
-### **HashSet – For Storing Reports**
-- Used to store all submitted issue reports in-memory.
-- Prevents duplicates by automatically ensuring unique entries.
-- Enables **O(1)** average lookup and insertion time, ensuring fast performance.
-  
-**Example:**
-private static HashSet<ReportIssuesForm> _reports = new();
-Each time a report is submitted, it is added to this HashSet.
-This allows the “Service Request Status” feature to quickly retrieve reports without database queries, improving response time.
-
-## PriorityQueue – For Event Recommendations
-Manages event scheduling and favorites.
-
-Events are sorted by date or user interest (priority).
-
-Ensures efficient retrieval of the most relevant events (O(log n)).
-
-**Example:**
-PriorityQueue<Event, DateTime> eventQueue = new();
-When users favorite events, the system prioritizes similar categories in future recommendations.
-
-## Dictionary – For Category Grouping
-Used to group service requests or events by location or category.
-
-Allows constant-time lookup of grouped items.
+Keeps data structured for fast searching, filtering, and sorting.
 
 Example:
-var groupedReports = reports.GroupBy(r => r.Location)
-                            .ToDictionary(g => g.Key, g => g.ToList());
-This enables the “Community Reports” page to display grouped data efficiently, reducing redundant iterations.
 
-#Running the Application 
-Step 1: Clone the Project
-Open Visual Studio 2022 or later.
-Go to File → Clone Repository.
-Enter the repository URL:
-https://github.com/VCNMB-3rd-years/PROG7312_POE.git
-Click Clone.
+Dictionary<string, Event> eventsDictionary = new Dictionary<string, Event>();
+eventsDictionary.Add("Community Cleanup", new Event("Cleanup Drive", "Environment", new DateTime(2025, 11, 12)));
 
-# Screenshots
-Section	Description	Screenshot
-Report Submission Page	Users fill in issue details and upload media	
 
-Confirmation Page	Displays submitted details before saving	
+This allows fast lookups like eventsDictionary["Community Cleanup"].
 
-Community Reports	Shows all reports grouped by location	
+### 2. Stack / Queue / Priority Queue
 
-Event Dashboard	Displays local events and favorites	
+Used in: Managing event submissions and user activity history
 
-Announcements Page	Lists latest and older announcements	
+Purpose:
 
-# Summary
+Queue: Manages incoming new event submissions in FIFO order for fair processing.
 
-The Municipality Report Issues Portal delivers an accessible and efficient digital platform for citizens to report and track local municipal issues. It empowers communities to communicate directly with their municipalities through an intuitive interface designed for speed, clarity, and transparency.
-By utilizing in-memory data structures such as HashSet, Dictionary, and PriorityQueue, the system achieves high performance, real-time responsiveness, and organized data management—all without the need for a traditional database. This design ensures that reports, events, and announcements are efficiently processed and displayed to users in real time.
+Stack: Stores “recently viewed” events so users can quickly revisit them (LIFO order).
 
-# Conclusion
-The Service Request Status feature exemplifies the portal’s focus on performance and user experience through intelligent use of data structures:
-HashSet guarantees that every service request is unique, preventing duplicates and ensuring data integrity.
-Dictionary enables instant grouping and retrieval of reports by status, location, or category—reducing load times and improving clarity.
-List ensures that service requests and events are presented in a clean, ordered, and user-friendly format.
-PriorityQueue enhances the recommendation engine by efficiently prioritizing events based on user interest and time relevance.
-Together, these components form a robust, scalable, and responsive system that not only streamlines the reporting process but also strengthens community engagement. The result is a modern municipal portal that prioritizes efficiency, transparency, and user satisfaction, serving as a model for smart civic service management.
+Priority Queue (MinHeap): Prioritizes urgent or soonest events (by date).
+
+Example:
+
+Queue<Event> newEventQueue = new Queue<Event>();
+newEventQueue.Enqueue(new Event("Water Repair", "Maintenance", DateTime.Now.AddDays(1)));
+
+
+This ensures events are handled in the order they are received.
+
+### 3. Set / HashSet
+
+Used in: Managing unique categories and dates for filtering.
+
+Purpose:
+Ensures no duplicate event categories or dates are stored when filtering user searches.
+
+Example:
+
+HashSet<string> eventCategories = new HashSet<string>();
+eventCategories.Add("Environment");
+eventCategories.Add("Sports");
+
+
+Prevents duplicates like adding "Environment" twice.
+
+### 4. Binary Search Tree (BST)
+
+Used in: Sorting and organizing event data by date or name.
+
+Purpose:
+Maintains sorted order dynamically as events are added.
+Supports in-order traversal to list events chronologically.
+
+Example:
+
+BinarySearchTree<Event> eventTree = new BinarySearchTree<Event>();
+eventTree.Insert(new Event("Tree Planting", "Environment", new DateTime(2025, 11, 20)));
+var sortedEvents = eventTree.InOrder();
+
+
+Returns all events in sorted order without manually sorting the list.
+
+### 5. Graph (Adjacency List)
+
+Used in: Recommendation System
+
+Purpose:
+Models relationships between categories (e.g., users who view “Sports” often may also like “Health” events).
+
+Example:
+
+graph.AddEdge("Sports", "Health");
+graph.AddEdge("Environment", "Community");
+var recommendations = graph.BFS("Sports");
+
+
+Suggests related categories dynamically during browsing.
+
+### 6. MinHeap (Priority Queue Implementation)
+
+Used in: Prioritizing urgent service requests or upcoming events.
+
+Purpose:
+Always keeps the soonest or highest-priority item at the top for quick access.
+
+Example:
+
+MinHeap<Event> upcomingEvents = new MinHeap<Event>();
+upcomingEvents.Add(new Event("Community Meeting", "Civic", new DateTime(2025, 11, 10)));
+var nextEvent = upcomingEvents.Pop(); // Retrieves earliest event
+
+## 💡 Recommendation Algorithm (Dynamic)
+
+The recommendation algorithm dynamically tracks a user's searches and viewed categories during a session.
+
+Data is stored in a Dictionary<string, int> (searchCount) that tracks how often each category or date is searched.
+
+Recommendations are then generated using a Graph traversal (BFS) from the most-searched category.
+
+When the app is closed or user navigates away, the data is cleared, ensuring privacy and fresh suggestions next session.
+
+Example Workflow:
+
+User searches “Sports” → searchCount["Sports"]++
+
+Graph links “Sports” → “Health” → “Community”
+
+Recommendations show “Health Fair” and “Community Walk”
+
+On app shutdown → searchCount.Clear()
+
+## ⚙️ How to Compile and Run
+### 🧱 Prerequisites
+
+Visual Studio 2022 or newer
+
+.NET 6.0 or later
+
+Windows OS (for WinForms support)
+
+### 🪜 Steps to Run
+
+Clone the repository:
+
+git clone https://github.com/YourUsername/PROG7312_POE.git
+
+
+Open the solution file in Visual Studio:
+
+PROG7312_POE.sln
+
+
+Set the startup project to:
+
+PROG7312_POE
+
+
+Build the project (Ctrl + Shift + B)
+
+Run the application (F5)
+
+
+## 🧭 How to Use
+
+Main Menu → Navigate between:
+
+- Service Request Page
+
+= Local Events & Announcements
+
+Recommendations
+
+Exit
+
+Events Page
+
+Search by category or date
+
+Sort by date/name/category
+
+View recommendations based on previous searches
+
+Service Request Page
+
+Submit and monitor municipal service requests
+
+View the status and expected resolution date
+
+## 🧩 Improvements from Part 1 & 2
+Area	Feedback from Part 2	Improvement in Part 3
+Dictionaries	Only partially implemented	Fully integrated using Dictionary<string, Event> for event lookup
+Sets	Missing or non-functional	Added HashSet for unique categories/dates
+Recommendations	Static and inaccurate	Now dynamically tracks searches per session using a Graph and clears on exit
+Smart Algorithm	No pattern tracking	Added searchCount tracking and BFS-based related category recommendations
+Code Quality	Mixed structure	Refactored into Models/DataStructures and Services folders for modularity
+
+## 🧾 Changelog
+Version	Date	Update Summary
+1.0	Part 1	Basic UI and service request form created
+2.0	Part 2	Added Events page, implemented stacks & queues
+3.0	Part 3	Introduced search-based recommendations, Sets, BST, and Graph structures; optimized event management
